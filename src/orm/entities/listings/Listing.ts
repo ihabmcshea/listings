@@ -13,6 +13,7 @@ import {
 
 import { City } from '../cities/City';
 import { Photo } from '../photos/Photo';
+import { User } from '../users/User';
 
 import { Status } from './types';
 
@@ -28,11 +29,6 @@ export class Listing {
     nullable: true,
   })
   description: string;
-
-  @Column({
-    nullable: false,
-  })
-  name: string;
 
   @Column({
     default: 'Available' as Status,
@@ -69,13 +65,18 @@ export class Listing {
   @ManyToOne((_type) => City, (city: City) => city.listings, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'cityId' })
+  @JoinColumn({ name: 'city_id' })
   city!: City;
+
+  @ManyToOne((_type) => User, (user: User) => user.listings, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user!: User;
 
   @OneToMany((_type) => Photo, (photo: Photo) => photo.apartment, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'listingId' })
   photos!: Photo[];
 
   @Column()

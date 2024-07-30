@@ -10,7 +10,7 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - ./database/boilerplate:/var/lib/postgresql/data/
+      - ./database/apartments:/var/lib/postgresql/data/
 
   apartment_listing:
     entrypoint: /bin/sh './scripts/apartments-dev.sh'

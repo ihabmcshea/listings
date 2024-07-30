@@ -1,5 +1,7 @@
 import bcrypt from 'bcryptjs';
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+
+import { Listing } from '../listings/Listing';
 
 import { Role } from './types';
 
@@ -28,13 +30,25 @@ export class User {
   name: string;
 
   @Column({
+    nullable: true,
+  })
+  description: string;
+
+  @Column({
     default: 'STANDARD' as Role,
     length: 30,
   })
   role: string;
 
-  @Column()
+  @Column({
+    default: '/public/images/default.jpg',
+  })
   profilePictureURL: string;
+
+  @OneToMany((_type) => Listing, (listing: Listing) => listing.user, {
+    onDelete: 'CASCADE',
+  })
+  listings!: Listing[];
 
   @Column()
   @CreateDateColumn()

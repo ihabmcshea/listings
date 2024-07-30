@@ -1,7 +1,7 @@
 {
   "info": {
     "_postman_id": "da0fe49f-e424-4b96-8f55-49f7db0583dc",
-    "name": "RESTful API Boilerplate",
+    "name": "Listings API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [

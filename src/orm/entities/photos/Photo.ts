@@ -1,23 +1,40 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, JoinColumn, ManyToOne, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  JoinColumn,
+  ManyToOne,
+  UpdateDateColumn,
+} from 'typeorm';
+
 import { Listing } from '../listings/Listing';
 
 @Entity('photo')
 export class Photo {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    url: string;
+  @Column()
+  url: string;
 
-    @Column()
-    height: number;
+  @Column()
+  height: number;
 
-    @Column()
-    width: number;
+  @Column()
+  width: number;
 
-    @ManyToOne((_type) => Listing, (listing: Listing) => listing.photos, {
-        onDelete: "CASCADE"
-    })
-    @JoinColumn({ name: "photos" })
-    apartment!: Listing;
+  @ManyToOne((_type) => Listing, (listing: Listing) => listing.photos, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'listing_id' })
+  apartment!: Listing;
+
+  @Column()
+  @CreateDateColumn()
+  created_at: Date;
+
+  @Column()
+  @UpdateDateColumn()
+  updated_at: Date;
 }

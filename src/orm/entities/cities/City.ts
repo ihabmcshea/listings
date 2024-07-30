@@ -1,37 +1,37 @@
-import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    CreateDateColumn,
-    JoinColumn,
-    OneToMany,
-    UpdateDateColumn,
-} from 'typeorm';
+import { Point } from 'geojson';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, UpdateDateColumn, Index } from 'typeorm';
 
 import { Listing } from '../listings/Listing';
 
 @Entity('city')
 export class City {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    name: string;
+  @Column()
+  name: string;
 
-    @Column()
-    country: string;
+  @Column()
+  country: string;
 
-    @OneToMany((_type) => Listing, (listing: Listing) => listing.city, {
-        onDelete: 'CASCADE',
-    })
-    @JoinColumn({ name: 'cityId' })
-    listings!: Listing[];
+  @Index({ spatial: true })
+  @Column({
+    type: 'geography',
+    spatialFeatureType: 'Point',
+    srid: 4326,
+  })
+  coordinates: Point;
 
-    @Column()
-    @CreateDateColumn()
-    created_at: Date;
+  @OneToMany((_type) => Listing, (listing: Listing) => listing.city, {
+    onDelete: 'CASCADE',
+  })
+  listings!: Listing[];
 
-    @Column()
-    @UpdateDateColumn()
-    updated_at: Date;
+  @Column()
+  @CreateDateColumn()
+  created_at: Date;
+
+  @Column()
+  @UpdateDateColumn()
+  updated_at: Date;
 }
