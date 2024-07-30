@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, Up
 
 import { Listing } from '../listings/Listing';
 
-@Entity('city')
+@Entity('cities')
 export class City {
   @PrimaryGeneratedColumn()
   id: number;

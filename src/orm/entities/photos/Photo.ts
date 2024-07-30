@@ -10,7 +10,7 @@ import {
 
 import { Listing } from '../listings/Listing';
 
-@Entity('photo')
+@Entity('photos')
 export class Photo {
   @PrimaryGeneratedColumn()
   id: number;

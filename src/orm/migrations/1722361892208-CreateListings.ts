@@ -5,13 +5,14 @@ export class CreateListings1722361892208 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "listings" (  
+      `
+      CREATE TABLE "listings" (  
             id serial NOT NULL,
             city_id integer NOT NULL,
             title character varying(255) NOT NULL,
             description text,
             status character varying(100) NOT NULL,
-            coordinates point,
+            coordinates geography,
             location text,
             furnished boolean,
             rooms integer,
