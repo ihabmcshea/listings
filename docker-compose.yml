@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  apartment_listing:
+    container_name: 'apartment_listing'
+    build: .
+    restart: always
+    volumes:
+      - .:/app/
+      - /app/node_modules
