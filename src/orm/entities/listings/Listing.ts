@@ -80,7 +80,7 @@ export class Listing {
   @JoinColumn({ name: 'user_id' })
   user!: User;
 
-  @OneToMany((_type) => Photo, (photo: Photo) => photo.apartment, {
+  @OneToMany((_type) => Photo, (photo: Photo) => photo.listing, {
     onDelete: 'CASCADE',
   })
   photos!: Photo[];

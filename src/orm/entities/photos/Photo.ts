@@ -28,7 +28,7 @@ export class Photo {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'listing_id' })
-  apartment!: Listing;
+  listing!: Listing;
 
   @Column()
   @CreateDateColumn()
