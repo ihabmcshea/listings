@@ -93,6 +93,11 @@ export const showListings = async (req: Request, res: Response, next: NextFuncti
       pages,
       limit: listingsPerPage,
     };
+  } else {
+    const customError = new CustomError(400, 'Validation', 'No city or coordinates provided', null, null, [
+      { parameter_error: 'No city or coordinates provided' },
+    ]);
+    return res.status(400).send(customError);
   }
   return res.status(200).send(listings);
 };

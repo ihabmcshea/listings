@@ -13,7 +13,7 @@ export class CreateUsers1722357124281 implements MigrationInterface {
         password character varying(255),
         description text,
         role character varying(30) DEFAULT 'STANDARD',
-        profile_picture_url text,
+        profile_picture_url text DEFAULT '/p,
         created_at date,
         updated_at date,
         PRIMARY KEY (id)

@@ -1,15 +1,14 @@
 import 'dotenv/config';
 import path from 'path';
 
-import multer, { FileFilterCallback } from 'multer';
+import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 
 import { checkFileType } from 'middleware/validation/imageUploads';
-import { IFile } from 'types/File';
 
-type DestinationCallback = (error: Error | null, destination: string) => void;
-type FileNameCallback = (error: Error | null, filename: string) => void;
-const UPLOAD_PATH = process.env.UPLOAD_PATH;
+const getPathWithoutPrefixes = (path: string): string => {
+  return `public/${path.split('/public/')[1]}`;
+};
 
 const generateFileUuuid = (file) => {
   const fileuuid = uuidv4() + Date.now();
@@ -44,18 +43,7 @@ const usersStorage = multer.diskStorage({
   },
 });
 
-const listingsUpload = multer({ storage: listingStorage, fileFilter: checkFileType });
+const listingsUpload = multer({ storage: listingStorage }).array('photos', 8);
 const usersUpload = multer({ storage: usersStorage }).single('profile_picture');
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, '/public/');
-  },
-  filename: (req, file, cb) => {
-    const fileName = generateFileUuuid(file);
-    cb(null, fileName);
-  },
-});
 
-// Create the multer instance
-const upload_ = multer({ storage: storage }).single('profile_picture');
-export { listingsUpload, usersUpload, upload_ };
+export { listingsUpload, usersUpload, getPathWithoutPrefixes };
