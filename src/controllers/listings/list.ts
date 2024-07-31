@@ -53,18 +53,16 @@ export const showListings = async (req: Request, res: Response, next: NextFuncti
       )
       .innerJoin(User, 'user', 'listing.user_id = user.id')
       .innerJoin(City, 'city', 'listing.city_id = city.id')
-      .leftJoinAndSelect('listing.photos', 'photo')
-
-      // .innerJoin('listing.city', 'city')
-      // .innerJoin('listing.photos', 'photos')
+      .leftJoinAndMapMany('listing.photos', Photo, 'photo', 'photo.listing_id = listing.id')
       .orderBy('distance', 'ASC')
       .setParameters({
         // stringify GeoJSON
         origin: JSON.stringify(origin),
         range: radius * 1000, //KM conversion
       })
-      .getRawMany();
+      .getMany();
 
+    const photoRepository = getRepository(Photo);
     const total = await listingRepository
       .createQueryBuilder('listing')
       .select([
@@ -77,7 +75,7 @@ export const showListings = async (req: Request, res: Response, next: NextFuncti
       .leftJoinAndSelect('listing.user', 'user')
       .select(['user.name', 'user.description', 'user.profile_picture_url'])
       .leftJoinAndSelect('listing.city', 'city')
-      .innerJoin('listing.photos', 'photos')
+      .leftJoinAndMapMany('listing.photos', Photo, 'photo', 'photo.listing_id = listing.id')
       .orderBy('distance', 'ASC')
       .setParameters({
         // stringify GeoJSON
