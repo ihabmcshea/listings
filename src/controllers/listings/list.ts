@@ -19,6 +19,7 @@ export const showListings = async (req: Request, res: Response, next: NextFuncti
     const [data, total] = await listingRepository.findAndCount({
       where: {
         city,
+        draft: false,
       },
       take: listingsPerPage,
       skip,
@@ -48,7 +49,7 @@ export const showListings = async (req: Request, res: Response, next: NextFuncti
         'ST_Distance(listing.coordinates, ST_SetSRID(ST_GeomFromGeoJSON(:origin), ST_SRID(listing.coordinates)))/1000 AS distance',
       ])
       .where(
-        'ST_DWithin(listing.coordinates, ST_SetSRID(ST_GeomFromGeoJSON(:origin), ST_SRID(listing.coordinates)) ,:range)',
+        'ST_DWithin(listing.coordinates, ST_SetSRID(ST_GeomFromGeoJSON(:origin), ST_SRID(listing.coordinates)) ,:range) AND draft IS NOT TRUE',
       )
       .innerJoin(User, 'user', 'listing.user_id = user.id')
       .innerJoin(City, 'city', 'listing.city_id = city.id')

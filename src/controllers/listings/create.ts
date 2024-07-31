@@ -54,3 +54,17 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
     return next(customError);
   }
 };
+
+export const publishDraft = async (req: Request, res: Response, next: NextFunction) => {
+  const { listing_id } = req.params;
+  const listingRepository = getRepository(Listing);
+  try {
+    const listing = await listingRepository.findOne(listing_id);
+    listing.draft = false;
+    await listingRepository.save(listing);
+    res.customSuccess(200, 'Listing published successfully');
+  } catch (err) {
+    const customError = new CustomError(400, 'Raw', 'Error', null, err);
+    return next(customError);
+  }
+};
