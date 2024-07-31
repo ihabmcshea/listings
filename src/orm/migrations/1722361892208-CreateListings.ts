@@ -17,6 +17,7 @@ export class CreateListings1722361892208 implements MigrationInterface {
             coordinates geography,
             location text,
             furnished boolean,
+            draft boolean DEFAULT true,
             rooms integer,
             bathrooms integer,
             user_id integer,

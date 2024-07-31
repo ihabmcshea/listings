@@ -86,6 +86,9 @@ export class Listing {
   photos!: Photo[];
 
   @Column()
+  draft: boolean;
+
+  @Column()
   @CreateDateColumn()
   created_at: Date;
 
