@@ -23,7 +23,8 @@ const generateFileUuuid = (file) => {
 
 const listingStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, `${UPLOAD_PATH}/listings`);
+    const destination = path.join(__dirname, '../public/listings');
+    cb(null, destination);
   },
   filename: function (req, file, cb) {
     const fileName = generateFileUuuid(file);
@@ -33,8 +34,9 @@ const listingStorage = multer.diskStorage({
 
 const usersStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, '/public/users');
-    cb(null, `src/public/users`);
+    // const uploadDir = process.env.UPLOAD_PATH;
+    const destination = path.join(__dirname, '../public/users');
+    cb(null, destination);
   },
   filename: (req, file, cb) => {
     const fileName = generateFileUuuid(file);
