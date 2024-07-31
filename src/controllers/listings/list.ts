@@ -39,9 +39,9 @@ export const showListings = async (req: Request, res: Response, next: NextFuncti
       .createQueryBuilder('listing')
       .select([
         '*',
-        'ST_Distance(location, ST_SetSRID(ST_GeomFromGeoJSON(:origin), ST_SRID(location)))/1000 AS distance',
+        'ST_Distance(coordinates, ST_SetSRID(ST_GeomFromGeoJSON(:origin), ST_SRID(coordinates)))/1000 AS distance',
       ])
-      .where('ST_DWithin(location, ST_SetSRID(ST_GeomFromGeoJSON(:origin), ST_SRID(location)) ,:range)')
+      .where('ST_DWithin(coordinates, ST_SetSRID(ST_GeomFromGeoJSON(:origin), ST_SRID(coordinates)) ,:range)')
       .orderBy('distance', 'ASC')
       .setParameters({
         // stringify GeoJSON

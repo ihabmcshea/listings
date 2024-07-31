@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner, getRepository } from 'typeorm';
 import { Role } from '../entities/users/types';
 import { User } from '../entities/users/User';
 
-export class SeedUsers1590519635401 implements MigrationInterface {
+export class SeedUsers1722386341510 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
     const user = new User();
     const userRepository = getRepository(User);

@@ -4,25 +4,38 @@ import { getRepository } from 'typeorm';
 
 import { City } from 'orm/entities/cities/City';
 import { Listing } from 'orm/entities/listings/Listing';
+import { User } from 'orm/entities/users/User';
 import { CustomError } from 'utils/response/custom-error/CustomError';
 
 export const create = async (req: Request, res: Response, next: NextFunction) => {
-  const { title, description, rooms, bathrooms, city, long, lat, location } = req.body;
+  const { title, description, rooms, bathrooms, city_id, long, lat, location } = req.body;
   const { id, name } = req.jwtPayload;
 
   try {
+    const userRepository = getRepository(User);
+    const user = await userRepository.findOne({ id });
+    if (!user) {
+      const cityNotFoundError = new CustomError(400, 'Validation', 'Error fetching user data');
+      return next(cityNotFoundError);
+    }
+    const cityRepository = getRepository(City);
+    const city = await cityRepository.findOne({ id: city_id });
+    if (!city) {
+      const cityNotFoundError = new CustomError(400, 'Validation', "City doesn't exist");
+      return next(cityNotFoundError);
+    }
+    const listingRepository = getRepository(Listing);
+
     const newListing = new Listing();
     newListing.title = title;
     newListing.description = description;
     newListing.rooms = rooms;
     newListing.bathrooms = bathrooms;
     newListing.city = city;
-    const cityRepository = getRepository(City);
-    const currentCity = cityRepository.findOne(city);
-    if (!currentCity) {
-      const cityNotFoundError = new CustomError(400, 'Validation', "City doesn't exist");
-      return next(cityNotFoundError);
-    }
+    newListing.user = user;
+
+    await listingRepository.save(newListing);
+    res.customSuccess(200, 'Listing successfully created.');
   } catch (err) {
     const customError = new CustomError(400, 'Raw', 'Error', null, err);
     return next(customError);

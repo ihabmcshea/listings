@@ -15,32 +15,32 @@ services:
     volumes:
       - ./database/listings:/var/lib/postgresql/data/
 
-  cache:
-    image: redis:6.2-alpine
-    restart: always
-    ports:
-      - '6379:6379'
-    command: redis-server --save 20 1 --loglevel warning --requirepass HCcx1ZSkWCWcldmp81Oi1X8WhjC43vyI
-    volumes:
-      - cache:/data
+  # cache:
+  #   image: redis:6.2-alpine
+  #   restart: always
+  #   ports:
+  #     - '6379:6379'
+  #   command: redis-server --save 20 1 --loglevel warning --requirepass HCcx1ZSkWCWcldmp81Oi1X8WhjC43vyI
+  #   volumes:
+  #     - cache:/data
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.1
-    container_name: elasticsearch
-    environment:
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - esdata1:/usr/share/elasticsearch/data
-    ports:
-      - 9200:9200
-    networks:
-      - esnet
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:6.4.1
+  #   container_name: elasticsearch
+  #   environment:
+  #     - cluster.name=docker-cluster
+  #     - bootstrap.memory_lock=true
+  #     - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+  #   ulimits:
+  #     memlock:
+  #       soft: -1
+  #       hard: -1
+  #   volumes:
+  #     - esdata1:/usr/share/elasticsearch/data
+  #   ports:
+  #     - 9200:9200
+  #   networks:
+  #     - esnet
   apartment_listing:
     entrypoint: /bin/sh './scripts/apartments-dev.sh'
     env_file:
@@ -49,10 +49,10 @@ services:
       - '4000:4000'
     depends_on:
       - db_postgres
-      - cache
+      # - cache
     links:
       - db_postgres
-      - cache
+      # - cache
 
   apartments_test:
     container_name: 'apartments_test'
@@ -69,11 +69,11 @@ services:
     volumes:
       - .:/app/
       - /app/node_modules
-volumes:
-  cache:
-    driver: local
-  esdata1:
-    driver: local
+# volumes:
+#   cache:
+#     driver: local
+# esdata1:
+#   driver: local
 
-networks:
-  esnet:
+# networks:
+#   esnet:
