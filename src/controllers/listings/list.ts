@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { Point } from 'geojson';
 import { getRepository } from 'typeorm';
 
 import { listingsPerPage } from 'consts/ConstsListing';
@@ -62,7 +61,6 @@ export const showListings = async (req: Request, res: Response, next: NextFuncti
       })
       .getMany();
 
-    const photoRepository = getRepository(Photo);
     const total = await listingRepository
       .createQueryBuilder('listing')
       .select([
