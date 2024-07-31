@@ -11,7 +11,7 @@ import { PaginatedListings } from './interfaces';
 
 export const showListings = async (req: Request, res: Response, next: NextFunction) => {
   const { city, long, lat, radius = 5, page = 1 } = req.body;
-  const skip = listingsPerPage * page;
+  const skip = listingsPerPage * (page - 1);
   const listingRepository = getRepository(Listing);
   let listings: PaginatedListings;
   if (city && !(long && lat && radius)) {
@@ -33,9 +33,9 @@ export const showListings = async (req: Request, res: Response, next: NextFuncti
   } else if (long && lat && radius) {
     const origin = {
       type: 'Point',
-      coordinates: [long, lat],
+      coordinates: [lat, long],
     };
-    const [listingsNearby, total] = await listingRepository
+    const listingsNearby = await listingRepository
       .createQueryBuilder('listing')
       .select([
         '*',
@@ -48,8 +48,23 @@ export const showListings = async (req: Request, res: Response, next: NextFuncti
         origin: JSON.stringify(origin),
         range: radius * 1000, //KM conversion
       })
-      .getManyAndCount();
-    const pages = Math.min(total / listingsPerPage);
+      .getRawMany();
+
+    const total = await listingRepository
+      .createQueryBuilder('listing')
+      .select([
+        '*',
+        'ST_Distance(coordinates, ST_SetSRID(ST_GeomFromGeoJSON(:origin), ST_SRID(coordinates)))/1000 AS distance',
+      ])
+      .where('ST_DWithin(coordinates, ST_SetSRID(ST_GeomFromGeoJSON(:origin), ST_SRID(coordinates)) ,:range)')
+      .orderBy('distance', 'ASC')
+      .setParameters({
+        // stringify GeoJSON
+        origin: JSON.stringify(origin),
+        range: radius * 1000, //KM conversion
+      })
+      .getCount();
+    const pages = Math.ceil(total / listingsPerPage);
     listings = {
       total,
       listings: listingsNearby,
@@ -59,4 +74,8 @@ export const showListings = async (req: Request, res: Response, next: NextFuncti
     };
   }
   return res.status(200).send(listings);
+};
+
+export const showListing = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.body;
 };

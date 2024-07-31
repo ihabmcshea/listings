@@ -15,7 +15,7 @@ import { City } from '../cities/City';
 import { Photo } from '../photos/Photo';
 import { User } from '../users/User';
 
-import { Status } from './types';
+import { ListingType, Ownership, Status } from './types';
 
 @Entity('listings')
 export class Listing {
@@ -61,6 +61,12 @@ export class Listing {
     nullable: true,
   })
   bathrooms: number;
+
+  @Column()
+  listingType: ListingType;
+
+  @Column()
+  ownership: Ownership;
 
   @ManyToOne((_type) => City, (city: City) => city.listings, {
     onDelete: 'CASCADE',

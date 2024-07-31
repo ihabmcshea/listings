@@ -1,3 +1,12 @@
 export type Status = 'Available' | 'Sold';
-export type Ownership = 'Rent' | 'Resale';
-export type ListingType = 'Apartment' | 'Duplex' | 'Penthouse' | 'Villa' | 'Studio';
+export enum Ownership {
+  RENT = 'Rent',
+  RESALE = 'Resale',
+}
+export enum ListingType {
+  'Apartment',
+  'Duplex',
+  'Penthouse',
+  'Villa',
+  'Studio',
+}

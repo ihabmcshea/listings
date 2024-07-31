@@ -12,6 +12,8 @@ export class CreateListings1722361892208 implements MigrationInterface {
             title character varying(255) NOT NULL,
             description text,
             status character varying(100) NOT NULL,
+            listing_type character varying(255) NOT NULL,
+            ownership character varying(100) NOT NULL,
             coordinates geography,
             location text,
             furnished boolean,
