@@ -20,7 +20,6 @@ app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-
 try {
   const accessLogStream = fs.createWriteStream(path.join(__dirname, '../log/access.log'), {
     flags: 'a',
