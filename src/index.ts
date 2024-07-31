@@ -32,6 +32,9 @@ app.use(morgan('combined'));
 
 app.use('/', routes);
 
+// const publicFolder = path.join(__dirname, 'public');
+app.use('/public', express.static(__dirname + '/public'));
+
 app.use(errorHandler);
 
 const port = process.env.PORT || 4000;
