@@ -77,5 +77,14 @@ export const showListings = async (req: Request, res: Response, next: NextFuncti
 };
 
 export const showListing = async (req: Request, res: Response, next: NextFunction) => {
-  const { id } = req.body;
+  const { id } = req.params;
+  const listingRepository = getRepository(Listing);
+  const listing = await listingRepository
+    .createQueryBuilder('listing')
+    .where({ id })
+    .leftJoinAndSelect('listing.user', 'user')
+    .leftJoinAndSelect('listing.city', 'city')
+    .getOne();
+
+  res.status(200).send({ listing });
 };
