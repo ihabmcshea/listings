@@ -84,6 +84,7 @@ export const showListing = async (req: Request, res: Response, next: NextFunctio
     .where({ id })
     .leftJoinAndSelect('listing.user', 'user')
     .leftJoinAndSelect('listing.city', 'city')
+    .leftJoinAndSelect('listing.photos', 'photos')
     .getOne();
 
   res.status(200).send({ listing });
