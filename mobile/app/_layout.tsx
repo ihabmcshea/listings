@@ -10,8 +10,8 @@ import {
   Text,
 } from 'react-native'
 import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper'
-import { useLocationPermission } from '@/hooks/useLocationPermission'
-import CustomHeader from '@/components/CustomHeader'
+import { useLocationPermission } from '../hooks/useLocationPermission'
+import CustomHeader from '../components/CustomHeader'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()

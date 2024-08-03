@@ -1,47 +1,59 @@
+// src/components/CustomHeader.tsx
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text } from 'react-native-paper';
-import { useNavigation, useNavigationState } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Appbar } from 'react-native-paper';
+import { useRouter } from 'expo-router';
+import { FontAwesome } from '@expo/vector-icons';
 
-interface CustomHeaderProps {
-  title: string;
-}
+const CustomHeader = () => {
+  const router = useRouter();
+    const canGoBack = router.canGoBack;
 
-const CustomHeader: React.FC<CustomHeaderProps> = ({ title }) => {
-  const navigation = useNavigation();
-  const navState = useNavigationState((state) => state);
+  const handleLoginPress = () => {
+    router.push('/login'); // Adjust the route based on your app structure
+  };
 
   return (
-    <View style={styles.headerContainer}>
-      {navState.index > 0 && (
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="arrow-back" size={24} color="white" />
-        </TouchableOpacity>
-      )}
-      <Text style={styles.title}>{title}</Text>
-    </View>
+    <Appbar.Header style={styles.header}>
+            {canGoBack &&     <TouchableOpacity
+      style={styles.backButton}
+      onPress={() => router.back()}
+    >
+      <FontAwesome name="arrow-left" size={24} color="#fff" />
+    </TouchableOpacity>
+}
+
+      <Appbar.Content title="My App" titleStyle={styles.title} />
+      <TouchableOpacity style={styles.loginButton} onPress={handleLoginPress}>
+        <Text style={styles.loginButtonText}>Login</Text>
+      </TouchableOpacity>
+    </Appbar.Header>
   );
 };
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    backgroundColor: '#007BFF',
-  },
-  backButton: {
-    marginRight: 10,
+  header: {
+    backgroundColor: '#007BFF', // Change to your desired background color
   },
   title: {
-    fontSize: 20,
-    color: 'white',
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  loginButton: {
+    padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+  },
+  backButton: {
+    padding: 10,
+    marginLeft: 10,
+  },
+  loginButtonText: {
+    color: '#007BFF',
     fontWeight: 'bold',
   },
 });
+;
+
 
 export default CustomHeader;
