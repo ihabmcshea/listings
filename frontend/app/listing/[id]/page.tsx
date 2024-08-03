@@ -1,10 +1,9 @@
 'use client';
 import React from 'react';
 import useSWR from 'swr';
-import { Box, Flex, Text, Avatar, Button, Spinner, Divider, Stack } from '@chakra-ui/react';
+import { Box, Flex, Text, Image, Avatar, Button, Spinner, Divider, Stack } from '@chakra-ui/react';
 import { IListing } from '../../types/Listing';
 import { FaDollarSign, FaBed, FaBath, FaMapMarkerAlt, FaUser } from 'react-icons/fa';
-import Image from 'next/image';
 
 // Fetcher function for useSWR
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -17,6 +16,9 @@ const ListingPage: React.FC<{ params: { id: string } }> = ({ params }) => {
   if (isValidating) return <Spinner size="lg" />;
   const listing: IListing = data.data.listing;
 
+  const imageUrl = `/api/proxy-image?imageUrl=${encodeURIComponent(
+    `http://listings_api:4000/${listing.photos[0].url}`,
+  )}`;
   return (
     <Box padding={4} maxW="1200px" mx="auto">
       <Flex direction={{ base: 'column', lg: 'row' }} gap={4}>
@@ -80,11 +82,11 @@ const ListingPage: React.FC<{ params: { id: string } }> = ({ params }) => {
           {/* Slideshow */}
           <Box marginBottom={4} borderRadius="md" overflow="hidden" height="300px">
             <Image
-              src={listing?.photos[0].url}
+              src={imageUrl}
               alt={listing.title}
-              objectFit="cover"
               width="100%"
               height="100%"
+              objectFit="cover"
               borderRadius="md"
               cursor="pointer"
             />{' '}
