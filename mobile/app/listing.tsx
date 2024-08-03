@@ -34,7 +34,7 @@ const ListingsPage = () => {
       {/* Photo Slider */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.photoSlider}>
         {listing.photos.map((photo: any, index: number) => (
-          <Image key={index} source={{ uri: `http://192.168.1.175:4000/${photo.url}` }} style={styles.image} />
+          <Image key={index} source={{ uri: `http://listings_api:4000/${photo.url}` }} style={styles.image} />
         ))}
       </ScrollView>
 
@@ -76,7 +76,7 @@ const ListingsPage = () => {
           <View style={styles.userContainer}>
             <Avatar.Image
               size={50}
-              source={{ uri: `http://192.168.1.175:4000/${listing.user.avatar}` }}
+              source={{ uri: `http://listings_api:4000/${listing.user.avatar}` }}
               style={styles.userAvatar}
             />
             <View style={styles.userInfo}>

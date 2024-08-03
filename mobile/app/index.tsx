@@ -8,7 +8,7 @@ import { useRouter } from 'expo-router';
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const ListingsPage = () => {
-  const { data, error } = useSWR('http://192.168.1.175:4000/v1/listings/list', fetcher);
+  const { data, error } = useSWR('http://listings_api:4000/v1/listings/list', fetcher);
   const router = useRouter();
 
   if (error) return <Text style={styles.error}>Failed to load</Text>;
@@ -23,7 +23,7 @@ const ListingsPage = () => {
           onPress={() => router.push(`/listing?id=${listing.id}`)}
         >
           <Card.Cover
-            source={{ uri: `http://192.168.1.175:4000/${listing.photos[0].url}` }}
+            source={{ uri: `http://listings_api:4000/${listing.photos[0].url}` }}
             style={styles.cover}
           />
           <Card.Content>

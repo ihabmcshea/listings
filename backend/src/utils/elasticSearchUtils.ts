@@ -14,7 +14,6 @@ export const indexListing = async (listing: Listing) => {
         coordinates: listing.coordinates,
         city: listing.city?.name,
         photos: listing.photos.map((photo) => photo.url),
-        // Add other relevant fields
       },
     });
     console.log(`Listing ${listing.id} indexed successfully.`);
