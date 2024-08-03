@@ -2,11 +2,12 @@ import { Request, Response, NextFunction } from 'express';
 import { Point } from 'geojson';
 import { getRepository } from 'typeorm';
 
-import elasticSearchClient from 'clients/elasticSearchClient';
-import redis from 'clients/redisClient';
 import { listingsPerPage } from 'consts/ConstsListing';
 import { Listing } from 'orm/entities/listings/Listing';
 import { CustomError } from 'utils/response/custom-error/CustomError';
+
+import elasticSearchClient from '../../clients/elasticSearchClient';
+import redis from '../../clients/redisClient';
 
 import { ListingWithDistance, PaginatedListings } from './interfaces';
 

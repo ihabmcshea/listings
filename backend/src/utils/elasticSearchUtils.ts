@@ -1,11 +1,11 @@
-// elasticsearchUtils.ts
-import client from 'clients/elasticsearchClient';
 import { Listing } from 'orm/entities/listings/Listing';
+
+import elasticSearchClient from '../clients/elasticSearchClient';
 
 // Function to index a listing
 export const indexListing = async (listing: Listing) => {
   try {
-    await client.index({
+    await elasticSearchClient.index({
       index: 'listings',
       id: listing.id.toString(),
       body: {
@@ -26,7 +26,7 @@ export const indexListing = async (listing: Listing) => {
 // Function to delete a listing from index
 export const deleteListing = async (listingId: number) => {
   try {
-    await client.delete({
+    await elasticSearchClient.delete({
       index: 'listings',
       id: listingId.toString(),
     });
