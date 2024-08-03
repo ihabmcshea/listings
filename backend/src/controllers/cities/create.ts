@@ -8,10 +8,6 @@ import { CustomError } from 'utils/response/custom-error/CustomError';
 /**
  * Creates a new city in the database.
  *
- * @param req - The request object containing the city details in the body.
- * @param res - The response object used to send the response.
- * @param next - The next middleware function for error handling.
- *
  * @returns A success message if the city is created successfully, or an error message if something goes wrong.
  */
 export const create = async (req: Request, res: Response, next: NextFunction) => {

@@ -6,6 +6,7 @@
     "docker:dev": "docker-compose --file docker-compose.yml --compatibility up --build"
   },
   "dependencies": {
+    "@elastic/elasticsearch": "^8.14.0",
     "sinon": "^18.0.0",
     "webpack-babel-jest": "^1.0.4"
   },

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { Point } from 'geojson';
 import { getRepository } from 'typeorm';
 
+import redis from 'clients/redisClient';
 import { City } from 'orm/entities/cities/City';
 import { Listing } from 'orm/entities/listings/Listing';
 import { Status } from 'orm/entities/listings/types';
@@ -10,10 +11,6 @@ import { CustomError } from 'utils/response/custom-error/CustomError';
 
 /**
  * Creates a new listing in the database.
- *
- * @param req - The request object containing the listing details in the body.
- * @param res - The response object used to send the response.
- * @param next - The next middleware function for error handling.
  *
  * @returns A success message if the listing is created successfully, or an error message if something goes wrong.
  */
@@ -64,6 +61,8 @@ export const createListing = async (req: Request, res: Response, next: NextFunct
       type: 'Point',
       coordinates: [long, lat],
     } as Point;
+
+    redis.geoadd('listings', newListing.coordinates.longitude, newListing.coordinates.latitude, newListing.id);
 
     await listingRepository.save(newListing);
 
