@@ -4,6 +4,7 @@ import { getRepository } from 'typeorm';
 import { Listing } from 'orm/entities/listings/Listing';
 import { User } from 'orm/entities/users/User';
 import { CustomError } from 'utils/response/custom-error/CustomError';
+import { Role } from 'orm/entities/users/types';
 
 export const validateEdit = async (req: Request, res: Response, next: NextFunction) => {
   const { listing_id } = req.params;
@@ -17,7 +18,7 @@ export const validateEdit = async (req: Request, res: Response, next: NextFuncti
     relations: ['user'],
   });
 
-  if (listing && listing.user.id !== id && user.role !== 'Admin') {
+  if (listing && listing.user.id !== id && user.role !== Role.ADMINISTRATOR) {
     const customError = new CustomError(400, 'Unauthorized', 'Unauthorized to edit', null, null, [
       { unauthorized: 'Editting a listing not yours isnt allowed' },
     ]);

@@ -13,33 +13,9 @@ services:
       - '5432:5432'
     volumes:
       - ./backend/database/listings:/var/lib/postgresql/data/
+    networks:
+      - app-network
 
-  # cache:
-  #   image: redis:6.2-alpine
-  #   restart: always
-  #   ports:
-  #     - '6379:6379'
-  #   command: redis-server --save 20 1 --loglevel warning --requirepass HCcx1ZSkWCWcldmp81Oi1X8WhjC43vyI
-  #   volumes:
-  #     - cache:/data
-
-  # elasticsearch:
-  #   image: docker.elastic.co/elasticsearch/elasticsearch:6.4.1
-  #   container_name: elasticsearch
-  #   environment:
-  #     - cluster.name=docker-cluster
-  #     - bootstrap.memory_lock=true
-  #     - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
-  #   ulimits:
-  #     memlock:
-  #       soft: -1
-  #       hard: -1
-  #   volumes:
-  #     - esdata1:/usr/share/elasticsearch/data
-  #   ports:
-  #     - 9200:9200
-  #   networks:
-  #     - esnet
   listings_api:
     entrypoint: /bin/sh './scripts/listings-dev.sh'
     build: ./backend
@@ -56,6 +32,26 @@ services:
     volumes:
       - ./backend:/app/
       - /app/node_modules
+    networks:
+      - app-network
+
+  nextjs_frontend:
+    container_name: 'nextjs_frontend'
+    build:
+      context: ./frontend
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - listings_api
+    command: npm run dev
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
 # volumes:
 #   cache:
 #     driver: local

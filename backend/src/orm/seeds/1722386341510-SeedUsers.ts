@@ -14,7 +14,7 @@ export class SeedUsers1722386341510 implements MigrationInterface {
     user.email = 'ihabshea@gmail.com';
     user.password = 'testPassword!1';
     user.hashPassword();
-    user.role = 'ADMINISTRATOR' as Role;
+    user.role = Role.ADMINISTRATOR;
     await userRepository.save(user);
   }
 

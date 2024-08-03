@@ -16,6 +16,7 @@ export class CreateListings1722361892208 implements MigrationInterface {
     furnished BOOLEAN DEFAULT false NOT NULL,
     rooms INT,
     bathrooms INT,
+    price INT,
     listing_type VARCHAR(30) NOT NULL,
     ownership VARCHAR(30) NOT NULL,
     city_id INT,

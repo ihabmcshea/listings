@@ -56,6 +56,9 @@ export class Listing {
   @Column({ type: 'int', nullable: true })
   bathrooms: number;
 
+  @Column({ type: 'int', nullable: false })
+  price: number;
+
   @Column({
     type: 'enum',
     enum: ListingType,

@@ -16,8 +16,13 @@ import { User } from 'orm/entities/users/User';
  * Returns the listing with associated user details and an array of its photos.
  */
 export const showListings = async (req: Request, res: Response, next: NextFunction) => {
-  const { city, long, lat, radius = 5, page = 1 } = req.body;
-  const skip = listingsPerPage * (page - 1);
+  const city = Number(req.query.city);
+  const page = Number(req.query.page) || 1;
+  const long = Number(req.query.long);
+  const lat = Number(req.query.lat);
+  const radius = Number(req.params.radius) || 5;
+  const pageAsNumber = Number(page);
+  const skip = listingsPerPage * (pageAsNumber - 1);
   const listingRepository = getRepository(Listing);
 
   try {
@@ -40,7 +45,6 @@ export const showListings = async (req: Request, res: Response, next: NextFuncti
       console.log(listings);
       return res.customSuccess(200, 'Listings retrieved', listings);
     } else if (long && lat && radius) {
-      console.log('wearehere');
       // Coordinates provided; perform a geospatial query
       const origin: Point = { type: 'Point', coordinates: [long, lat] };
       const originGeoJson = JSON.stringify(origin);

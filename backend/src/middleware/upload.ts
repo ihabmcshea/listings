@@ -18,7 +18,7 @@ const generateFileUuid = (file: Express.Multer.File): string => {
 
 // File type validation function
 const checkFileType = (req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
-  const fileTypes = /jpeg|jpg|heic|png|gif/;
+  const fileTypes = /jpeg|jpg|webp|heic|png|gif/;
   const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = fileTypes.test(file.mimetype);
 
