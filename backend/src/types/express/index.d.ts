@@ -1,4 +1,4 @@
-import { JwtPayload } from "../JwtPayload";
+import { JwtPayload } from '../JwtPayload';
 
 declare global {
   namespace Express {
@@ -6,11 +6,7 @@ declare global {
       jwtPayload: JwtPayload;
     }
     export interface Response {
-      customSuccess(
-        httpStatusCode: number,
-        message: string,
-        data?: any
-      ): Response;
+      customSuccess(httpStatusCode: number, message: string, data?: any): Response;
     }
   }
 }

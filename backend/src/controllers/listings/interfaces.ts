@@ -1,5 +1,5 @@
-import { Listing } from "orm/entities/listings/Listing";
-import { paginatedLists } from "types/paginatedLists";
+import { Listing } from 'orm/entities/listings/Listing';
+import { paginatedLists } from 'types/paginatedLists';
 
 export interface ListingWithDistance extends Listing {
   distance?: number;

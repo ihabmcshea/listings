@@ -1,14 +1,10 @@
-import { Request, Response, NextFunction } from "express";
-import { getRepository } from "typeorm";
+import { Request, Response, NextFunction } from 'express';
+import { getRepository } from 'typeorm';
 
-import { User } from "orm/entities/users/User";
-import { CustomError } from "utils/response/custom-error/CustomError";
+import { User } from 'orm/entities/users/User';
+import { CustomError } from 'utils/response/custom-error/CustomError';
 
-export const changePassword = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const changePassword = async (req: Request, res: Response, next: NextFunction) => {
   const { password, passwordNew } = req.body;
   const { id, name } = req.jwtPayload;
 
@@ -17,16 +13,12 @@ export const changePassword = async (
     const user = await userRepository.findOne({ where: { id } });
 
     if (!user) {
-      const customError = new CustomError(404, "General", "Not Found", [
-        `User ${name} not found.`,
-      ]);
+      const customError = new CustomError(404, 'General', 'Not Found', [`User ${name} not found.`]);
       return next(customError);
     }
 
     if (!user.checkIfPasswordMatch(password)) {
-      const customError = new CustomError(400, "General", "Not Found", [
-        "Incorrect password",
-      ]);
+      const customError = new CustomError(400, 'General', 'Not Found', ['Incorrect password']);
       return next(customError);
     }
 
@@ -34,9 +26,9 @@ export const changePassword = async (
     user.hashPassword();
     userRepository.save(user);
 
-    res.customSuccess(200, "Password successfully changed.");
+    res.customSuccess(200, 'Password successfully changed.');
   } catch (err) {
-    const customError = new CustomError(400, "Raw", "Error", null, err);
+    const customError = new CustomError(400, 'Raw', 'Error', null, err);
     return next(customError);
   }
 };

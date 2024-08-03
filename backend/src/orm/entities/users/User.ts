@@ -1,21 +1,14 @@
-import bcrypt from "bcryptjs";
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  OneToMany,
-} from "typeorm";
+import bcrypt from 'bcryptjs';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 
-import { Listing } from "../listings/Listing";
+import { Listing } from '../listings/Listing';
 
-import { Role } from "./types";
+import { Role } from './types';
 
 /**
  * Represents a user in the system.
  */
-@Entity("users")
+@Entity('users')
 export class User {
   /**
    * Unique identifier for the user.
@@ -62,31 +55,31 @@ export class User {
   /**
    * The role of the user in the system. Defaults to 'STANDARD'.
    */
-  @Column({ type: "enum", enum: Role, default: "STANDARD" })
+  @Column({ type: 'enum', enum: Role, default: 'STANDARD' })
   role: Role;
 
   /**
    * URL to the user's profile picture. Defaults to a placeholder image.
    */
-  @Column({ default: "/public/images/default.jpg" })
+  @Column({ default: '/public/images/default.jpg' })
   profilePictureURL: string;
 
   /**
    * List of listings created by the user.
    */
-  @OneToMany(() => Listing, (listing) => listing.user, { onDelete: "CASCADE" })
+  @OneToMany(() => Listing, (listing) => listing.user, { onDelete: 'CASCADE' })
   listings: Listing[];
 
   /**
    * Timestamp when the user was created.
    */
-  @CreateDateColumn({ type: "timestamp" })
+  @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
 
   /**
    * Timestamp when the user was last updated.
    */
-  @UpdateDateColumn({ type: "timestamp" })
+  @UpdateDateColumn({ type: 'timestamp' })
   updated_at: Date;
 
   /**

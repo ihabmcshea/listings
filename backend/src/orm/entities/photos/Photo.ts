@@ -6,28 +6,28 @@ import {
   JoinColumn,
   ManyToOne,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { Listing } from "../listings/Listing";
+import { Listing } from '../listings/Listing';
 
-@Entity("photos")
+@Entity('photos')
 export class Photo {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: "varchar", length: 255 })
+  @Column({ type: 'varchar', length: 255 })
   url: string;
 
-  @Column({ type: "int" })
+  @Column({ type: 'int' })
   height: number;
 
-  @Column({ type: "int" })
+  @Column({ type: 'int' })
   width: number;
 
   @ManyToOne(() => Listing, (listing: Listing) => listing.photos, {
-    onDelete: "CASCADE",
+    onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: "listing_id" })
+  @JoinColumn({ name: 'listing_id' })
   listing!: Listing;
 
   @CreateDateColumn()

@@ -1,12 +1,12 @@
-import { Request, Response, NextFunction } from "express";
-import { Point } from "geojson";
-import { getRepository } from "typeorm";
+import { Request, Response, NextFunction } from 'express';
+import { Point } from 'geojson';
+import { getRepository } from 'typeorm';
 
-import { City } from "orm/entities/cities/City";
-import { Listing } from "orm/entities/listings/Listing";
-import { Status } from "orm/entities/listings/types";
-import { User } from "orm/entities/users/User";
-import { CustomError } from "utils/response/custom-error/CustomError";
+import { City } from 'orm/entities/cities/City';
+import { Listing } from 'orm/entities/listings/Listing';
+import { Status } from 'orm/entities/listings/types';
+import { User } from 'orm/entities/users/User';
+import { CustomError } from 'utils/response/custom-error/CustomError';
 
 /**
  * Creates a new listing in the database.
@@ -17,33 +17,14 @@ import { CustomError } from "utils/response/custom-error/CustomError";
  *
  * @returns A success message if the listing is created successfully, or an error message if something goes wrong.
  */
-export const createListing = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const {
-    title,
-    description,
-    rooms,
-    bathrooms,
-    city_id,
-    furnished,
-    listing_type,
-    ownership,
-    long,
-    lat,
-    location,
-  } = req.body;
+export const createListing = async (req: Request, res: Response, next: NextFunction) => {
+  const { title, description, rooms, bathrooms, city_id, furnished, listing_type, ownership, long, lat, location } =
+    req.body;
   const userId = req.jwtPayload?.id;
 
   // Validate user ID from JWT payload
   if (!userId) {
-    const error = new CustomError(
-      400,
-      "Validation",
-      "User ID is missing from the request"
-    );
+    const error = new CustomError(400, 'Validation', 'User ID is missing from the request');
     return next(error);
   }
 
@@ -54,12 +35,12 @@ export const createListing = async (
     ]);
 
     if (!user) {
-      const error = new CustomError(400, "Validation", "User not found");
+      const error = new CustomError(400, 'Validation', 'User not found');
       return next(error);
     }
 
     if (!city) {
-      const error = new CustomError(400, "Validation", "City not found");
+      const error = new CustomError(400, 'Validation', 'City not found');
       return next(error);
     }
 
@@ -80,25 +61,19 @@ export const createListing = async (
 
     // Create coordinates point
     newListing.coordinates = {
-      type: "Point",
+      type: 'Point',
       coordinates: [long, lat],
     } as Point;
 
     await listingRepository.save(newListing);
 
     return res.status(201).json({
-      status: "success",
-      message: "Listing successfully created.",
+      status: 'success',
+      message: 'Listing successfully created.',
       listing: newListing,
     });
   } catch (err) {
-    const error = new CustomError(
-      500,
-      "Raw",
-      "Error occurred while creating the listing",
-      null,
-      err
-    );
+    const error = new CustomError(500, 'Raw', 'Error occurred while creating the listing', null, err);
     return next(error);
   }
 };
@@ -112,16 +87,12 @@ export const createListing = async (
  *
  * @returns A success message if the listing is published successfully, or an error message if something goes wrong.
  */
-export const publishDraft = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const publishDraft = async (req: Request, res: Response, next: NextFunction) => {
   const { listing_id } = req.params;
 
   // Validate the listing_id
   if (!listing_id) {
-    const error = new CustomError(400, "Validation", "Listing ID is required");
+    const error = new CustomError(400, 'Validation', 'Listing ID is required');
     return next(error);
   }
 
@@ -133,24 +104,18 @@ export const publishDraft = async (
 
     // Check if the update operation affected any rows
     if (result.affected === 0) {
-      const error = new CustomError(404, "NotFound", "Listing not found");
+      const error = new CustomError(404, 'NotFound', 'Listing not found');
       return next(error);
     }
 
     // Send a success response
     return res.status(200).json({
-      status: "success",
-      message: "Listing published successfully",
+      status: 'success',
+      message: 'Listing published successfully',
     });
   } catch (err) {
     // Handle unexpected errors
-    const error = new CustomError(
-      500,
-      "Raw",
-      "Error occurred while publishing the listing",
-      null,
-      err
-    );
+    const error = new CustomError(500, 'Raw', 'Error occurred while publishing the listing', null, err);
     return next(error);
   }
 };

@@ -1,17 +1,13 @@
-import { Request, Response, NextFunction } from "express";
-import { getRepository } from "typeorm";
+import { Request, Response, NextFunction } from 'express';
+import { getRepository } from 'typeorm';
 
-import { getPathWithoutPrefixes } from "middleware/upload";
-import { Listing } from "orm/entities/listings/Listing";
-import { Photo } from "orm/entities/photos/Photo";
-import { MulterRequest } from "types/File";
-import { CustomError } from "utils/response/custom-error/CustomError";
+import { getPathWithoutPrefixes } from 'middleware/upload';
+import { Listing } from 'orm/entities/listings/Listing';
+import { Photo } from 'orm/entities/photos/Photo';
+import { MulterRequest } from 'types/File';
+import { CustomError } from 'utils/response/custom-error/CustomError';
 
-export const addPhotosToListing = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const addPhotosToListing = async (req: Request, res: Response, next: NextFunction) => {
   const { listing_id } = req.params;
   const photos = (req as unknown as MulterRequest).files;
   const listingRepository = getRepository(Listing);
@@ -24,8 +20,8 @@ export const addPhotosToListing = async (
         where: { listing },
       });
       if (listingPhotosCount >= 8) {
-        const customError = new CustomError(400, "Raw", "Error", null, {
-          photoLimitReached: "A limit of 8 photos per listing is exceeded",
+        const customError = new CustomError(400, 'Raw', 'Error', null, {
+          photoLimitReached: 'A limit of 8 photos per listing is exceeded',
         });
         return next(customError);
       }
@@ -35,9 +31,9 @@ export const addPhotosToListing = async (
       listingPhoto.url = clearPath;
       await photoRepository.save(listingPhoto);
     });
-    res.customSuccess(200, "Photos successfully added.");
+    res.customSuccess(200, 'Photos successfully added.');
   } catch (err) {
-    const customError = new CustomError(400, "Raw", "Error", null, { err });
+    const customError = new CustomError(400, 'Raw', 'Error', null, { err });
     return next(customError);
   }
 };
