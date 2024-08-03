@@ -1,23 +1,38 @@
-# Use an official Node.js runtime as the base image
-FROM node:20-alpine
+# pull base image
+FROM node:20
 
-# Set the working directory in the container
-WORKDIR /app
+# set our node environment, either development or production
+# defaults to production, compose overrides this to development on build and run
+ARG NODE_ENV=development
+ENV NODE_ENV $NODE_ENV
 
-# Install Expo CLI globally
-RUN npm install -g expo-cli
+# default to port 19006 for node, and 19001 and 19002 (tests) for debug
+ARG PORT=19006
+ENV PORT $PORT
+EXPOSE 19006 19001 19002
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# install global packages
+ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
+ENV PATH /home/node/.npm-global/bin:$PATH
+RUN npm i --unsafe-perm -g npm@latest expo-cli@latest
+RUN apt-get update && apt-get install -y qemu-user-static
+#We need to install this inorder to start a tunnel on the docker conatiner
+RUN yarn add @expo/ngrok
 
-# Install dependencies
-RUN npm install
+# install dependencies first, in a different location for easier app bind mounting for local development
+# due to default /opt permissions we have to create the dir with root and change perms
+RUN mkdir /opt/my-app && chown root:root /opt/my-app
+WORKDIR /opt/my-app
+ENV PATH /opt/my-app/.bin:$PATH
+USER root
+COPY package.json package-lock.json ./
+RUN yarn install
 
-# Copy the rest of the application code
-COPY . .
 
-# Expose the port the app runs on
-EXPOSE 19000
+# copy in our source code last, as it changes the most
+WORKDIR /opt/my-app
+# for development, we bind mount volumes; comment out for production
+COPY . /opt/my-app/
 
-# Start the Expo app
-CMD ["expo", "start", "--tunnel"]
+
+CMD ["npx","expo", "start", "--tunnel"]
