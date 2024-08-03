@@ -1,7 +1,9 @@
 'use client';
 import React from 'react';
 import useSWR from 'swr';
-import { Box, Flex, Text, Image, Avatar, Button, Spinner, Divider, Stack } from '@chakra-ui/react';
+import { 
+  Box, Flex, Text, Image, Avatar, Button, Spinner, Divider, Stack, Center, Alert, AlertIcon, AlertTitle, AlertDescription 
+} from '@chakra-ui/react';
 import { IListing } from '../../types/Listing';
 import { FaDollarSign, FaBed, FaBath, FaMapMarkerAlt, FaUser } from 'react-icons/fa';
 
@@ -12,13 +14,35 @@ const ListingPage: React.FC<{ params: { id: string } }> = ({ params }) => {
   const { id } = params;
   const { data, error, isValidating } = useSWR(`/api/listing/${id}`, fetcher);
 
-  if (error) return <div>Failed to load</div>;
-  if (isValidating) return <Spinner size="lg" />;
+  if (error) {
+    return (
+      <Center h="100vh">
+        <Alert status="error">
+          <AlertIcon />
+          <Box flex="1">
+            <AlertTitle>Error!</AlertTitle>
+            <AlertDescription>Failed to load the listing. Please try again later.</AlertDescription>
+          </Box>
+        </Alert>
+      </Center>
+    );
+  }
+
+  if (isValidating) {
+    return (
+      <Center h="100vh">
+        <Spinner size="xl" thickness="4px" color="teal.500" />
+        <Text ml={4} fontSize="xl" fontWeight="bold">Please wait until the page loads</Text>
+      </Center>
+    );
+  }
+
   const listing: IListing = data.data.listing;
 
   const imageUrl = `/api/proxy-image?imageUrl=${encodeURIComponent(
     `http://listings_api:4000/${listing.photos[0].url}`,
   )}`;
+
   return (
     <Box padding={4} maxW="1200px" mx="auto">
       <Flex direction={{ base: 'column', lg: 'row' }} gap={4}>
@@ -60,7 +84,7 @@ const ListingPage: React.FC<{ params: { id: string } }> = ({ params }) => {
                 frameBorder="0"
                 src={`https://www.google.com/maps/embed/v1/place?q=${encodeURIComponent(
                   `${listing.coordinates.coordinates[0]},${listing.coordinates.coordinates[1]}`,
-                )}&key=AIzaSyBZCscE_y9jBYpXeeiiUlo_-_GAT9hoU1E`}
+                )}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY}`}
                 allowFullScreen
               ></iframe>
             </Box>

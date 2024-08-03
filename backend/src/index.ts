@@ -15,13 +15,7 @@ import { dbCreateConnection } from './orm/dbCreateConnection';
 import routes from './routes';
 
 export const app = express();
-app.use(
-  cors({
-    origin: ['http://nextjs_frontend:3000', 'http://localhost:3000'], // Allow the frontend to access resources
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true,
-  }),
-);
+app.use(cors());
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -50,7 +44,7 @@ app.use(
 
 app.use(errorHandler);
 
-const port = process.env.PORT || 4000;
+const port = process.env.API_PORT || 4000;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyBZCscE_y9jBYpXeeiiUlo_-_GAT9hoU1E'; // Store your API key in environment variables
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAP_KEY; // Store your API key in environment variables
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
