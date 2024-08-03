@@ -1,10 +1,10 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { IListing } from '../types/Listing';
+import React from 'react'
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { IListing } from '../types/Listing'
 
 interface ListingCardProps {
-  listing: IListing;
-  onPress: () => void;
+  listing: IListing
+  onPress: () => void
 }
 
 const ListingCard: React.FC<ListingCardProps> = ({ listing, onPress }) => {
@@ -16,8 +16,8 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing, onPress }) => {
         <Text style={styles.price}>${listing.price}</Text>
       </View>
     </TouchableOpacity>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   card: {
@@ -42,6 +42,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#888',
   },
-});
+})
 
-export default ListingCard;
+export default ListingCard

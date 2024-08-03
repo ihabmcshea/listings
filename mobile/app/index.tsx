@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Dimensions, View } from 'react-native';
-import { Card, Text, Button, Avatar, ActivityIndicator, List } from 'react-native-paper';
+import { Card, Text, Button, Avatar, ActivityIndicator } from 'react-native-paper';
 import useSWR from 'swr';
 import { useRouter } from 'expo-router';
 
@@ -17,13 +17,22 @@ const ListingsPage = () => {
   return (
     <ScrollView style={styles.container}>
       {data.data.listings.map((listing: any) => (
-        <Card key={listing.id} style={styles.card} onPress={() => router.push(`/listing?id=${listing.id}`)}>
-          <Card.Cover source={{ uri: `http://192.168.1.175:4000/${listing.photos[0].url}` }} />
+        <Card
+          key={listing.id}
+          style={styles.card}
+          onPress={() => router.push(`/listing?id=${listing.id}`)}
+        >
+          <Card.Cover
+            source={{ uri: `http://192.168.1.175:4000/${listing.photos[0].url}` }}
+            style={styles.cover}
+          />
           <Card.Content>
             <Text style={styles.title}>{listing.title}</Text>
-            <Text style={styles.info}>Price: ${listing.price}</Text>
-            <Text style={styles.info}>Type: {listing.listingType}</Text>
-            <Text style={styles.info}>Location: {listing.location}</Text>
+            <View style={styles.infoContainer}>
+              <Text style={styles.info}>Price: ${listing.price}</Text>
+              <Text style={styles.info}>Type: {listing.listingType}</Text>
+              <Text style={styles.info}>Location: {listing.location}</Text>
+            </View>
           </Card.Content>
         </Card>
       ))}
@@ -39,13 +48,23 @@ const styles = StyleSheet.create({
   },
   card: {
     marginBottom: 10,
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  cover: {
+    height: 200,
   },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
+    marginVertical: 5,
+  },
+  infoContainer: {
+    marginTop: 5,
   },
   info: {
     fontSize: 16,
+    color: '#666',
   },
   error: {
     color: 'red',
