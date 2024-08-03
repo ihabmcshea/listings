@@ -10,6 +10,8 @@ export interface IListing {
   price: number;
   city: Partial<ICity>;
   user: Partial<IUser>;
+  listingType: string;
+  ownership: string;
   coordinates: ICoordinates;
   photos: IPhoto[];
   bathrooms: number;
