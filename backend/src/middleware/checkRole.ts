@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
-import { Role } from '../orm/entities/users/types';
-import { CustomError } from '../utils/response/custom-error/CustomError';
+import { Role } from "../orm/entities/users/types";
+import { CustomError } from "../utils/response/custom-error/CustomError";
 
 export const checkRole = (roles: Role[], isSelfAllowed = false) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -13,18 +13,23 @@ export const checkRole = (roles: Role[], isSelfAllowed = false) => {
       if (id === parseInt(requestId)) {
         return next();
       }
-      errorSelfAllowed = 'Self allowed action.';
+      errorSelfAllowed = "Self allowed action.";
     }
 
     if (roles.indexOf(role) === -1) {
       const errors = [
-        'Unauthorized - Insufficient user rights',
+        "Unauthorized - Insufficient user rights",
         `Current role: ${role}. Required role: ${roles.toString()}`,
       ];
       if (errorSelfAllowed) {
         errors.push(errorSelfAllowed);
       }
-      const customError = new CustomError(401, 'Unauthorized', 'Unauthorized - Insufficient user rights', errors);
+      const customError = new CustomError(
+        401,
+        "Unauthorized",
+        "Unauthorized - Insufficient user rights",
+        errors
+      );
       return next(customError);
     }
     return next();

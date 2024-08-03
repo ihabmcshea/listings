@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class CreateListings1722361892208 implements MigrationInterface {
-  name = 'CreateListings1722361892208';
+  name = "CreateListings1722361892208";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -31,7 +31,7 @@ export class CreateListings1722361892208 implements MigrationInterface {
 CREATE INDEX idx_listings_title_status_location ON listings (title, status, location);
 CREATE INDEX idx_listings_coordinates ON listings USING GIST (coordinates);
 `,
-      undefined,
+      undefined
     );
   }
 

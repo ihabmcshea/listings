@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class CreatePhotos1722362824614 implements MigrationInterface {
-  name = 'CreatePhotos1722362824614';
+  name = "CreatePhotos1722362824614";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -16,7 +16,7 @@ export class CreatePhotos1722362824614 implements MigrationInterface {
     CONSTRAINT fk_listing FOREIGN KEY (listing_id) REFERENCES listings (id) ON DELETE CASCADE
 );
 `,
-      undefined,
+      undefined
     );
   }
 

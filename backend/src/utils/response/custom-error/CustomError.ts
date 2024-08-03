@@ -1,4 +1,4 @@
-import { ErrorType, ErrorValidation, ErrorResponse } from './types';
+import { ErrorType, ErrorValidation, ErrorResponse } from "./types";
 
 export class CustomError extends Error {
   private httpStatusCode: number;
@@ -13,7 +13,7 @@ export class CustomError extends Error {
     message: string,
     errors: string[] | null = null,
     errorRaw: any = null,
-    errorsValidation: ErrorValidation[] | null = null,
+    errorsValidation: ErrorValidation[] | null = null
   ) {
     super(message);
 

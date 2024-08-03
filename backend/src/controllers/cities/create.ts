@@ -1,9 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
-import { Point } from 'geojson';
-import { getRepository } from 'typeorm';
+import { Request, Response, NextFunction } from "express";
+import { Point } from "geojson";
+import { getRepository } from "typeorm";
 
-import { City } from 'orm/entities/cities/City';
-import { CustomError } from 'utils/response/custom-error/CustomError';
+import { City } from "orm/entities/cities/City";
+import { CustomError } from "utils/response/custom-error/CustomError";
 
 /**
  * Creates a new city in the database.
@@ -14,15 +14,25 @@ import { CustomError } from 'utils/response/custom-error/CustomError';
  *
  * @returns A success message if the city is created successfully, or an error message if something goes wrong.
  */
-export const create = async (req: Request, res: Response, next: NextFunction) => {
+export const create = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { name, country, lat, long } = req.body;
   const cityRepository = getRepository(City);
 
   try {
     // Check if the city already exists
-    const existingCity = await cityRepository.findOne({ where: { name, country } });
+    const existingCity = await cityRepository.findOne({
+      where: { name, country },
+    });
     if (existingCity) {
-      const cityExistsError = new CustomError(400, 'Validation', 'City already exists.');
+      const cityExistsError = new CustomError(
+        400,
+        "Validation",
+        "City already exists."
+      );
       return next(cityExistsError);
     }
 
@@ -31,7 +41,7 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
     newCity.name = name;
     newCity.country = country;
     newCity.coordinates = {
-      type: 'Point',
+      type: "Point",
       coordinates: [long, lat],
     } as Point;
 
@@ -39,13 +49,19 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
 
     // Respond with success message
     return res.status(201).json({
-      status: 'success',
-      message: 'City successfully created.',
+      status: "success",
+      message: "City successfully created.",
       city: newCity, // Optionally return the created city object
     });
   } catch (err) {
     // Handle unexpected errors
-    const customError = new CustomError(500, 'Raw', 'Error occurred while creating the city.', null, err);
+    const customError = new CustomError(
+      500,
+      "Raw",
+      "Error occurred while creating the city.",
+      null,
+      err
+    );
     return next(customError);
   }
 };

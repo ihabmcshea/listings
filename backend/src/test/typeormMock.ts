@@ -11,7 +11,7 @@ export const mockRepository = {
   getRawAndEntities: jest.fn(),
   getRawOne: jest.fn(),
 };
-jest.mock('typeorm', () => {
+jest.mock("typeorm", () => {
   return {
     getRepository: () => mockRepository,
     PrimaryGeneratedColumn: () => {},
