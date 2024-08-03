@@ -1,30 +1,19 @@
 import Sidebar from './components/Sidebar';
 import Search from './components/Search';
 import Listings from './components/Listings';
-
-// Mock data
-const mockListings = [
-  {
-    id: 1,
-    title: 'Listing 1',
-    description: 'Description 1',
-    photos: [{ url: '/path/to/photo.jpg' }],
-    user: { name: 'User 1' },
-    city: { name: 'City 1' },
-  },
-  // Add more listings here
-];
+import { Box, Flex } from '@chakra-ui/react';
 
 const HomePage = async () => {
   return (
-    <div style={{ display: 'flex' }}>
-      <Sidebar />
-      <div style={{ flex: 1 }}>
+    <Flex direction={{ base: 'column', md: 'row' }} p={4}>
+      <Box flexShrink={0} width={{ base: 'full', md: '250px' }} mb={{ base: 4, md: 0 }}>
+        <Sidebar />
+      </Box>
+      <Box flex="1">
         <Search />
-        {/* <Search initialCity={city} initialCountry={country} /> */}
-        <Listings listings={mockListings} />
-      </div>
-    </div>
+        <Listings />
+      </Box>
+    </Flex>
   );
 };
 

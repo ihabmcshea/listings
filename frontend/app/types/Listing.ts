@@ -12,6 +12,7 @@ export interface IListing {
   user: Partial<IUser>;
   listingType: string;
   ownership: string;
+  furnished: boolean;
   coordinates: ICoordinates;
   photos: IPhoto[];
   bathrooms: number;

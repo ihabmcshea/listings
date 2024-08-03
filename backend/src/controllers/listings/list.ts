@@ -138,6 +138,53 @@ export const showListings = async (req: Request, res: Response, next: NextFuncti
     return next(customError);
   }
 };
+
+export const showMyDrafts = async (req: Request, res: Response, next: NextFunction) => {
+  const page = Number(req.query.page) || 1;
+  const { id } = req.jwtPayload;
+  const pageAsNumber = Number(page);
+  const skip = listingsPerPage * (pageAsNumber - 1);
+  const listingRepository = getRepository(Listing);
+  try {
+    const [data, total] = await listingRepository.findAndCount({
+      where: { draft: true, user_id: id },
+      take: listingsPerPage,
+      skip,
+      relations: ['photos', 'city'], // Include user, city, and photos in the result
+    });
+    const pages = Math.ceil(total / listingsPerPage);
+    return res.customSuccess(200, 'Listings retrieved', {
+      total,
+      listings: data.map((listing) => ({
+        ...listing,
+        photos: listing.photos || [],
+      })),
+      page,
+      pages,
+      limit: listingsPerPage,
+    });
+  } catch (err) {
+    const customError = new CustomError(400, 'Raw', 'Error retrieving listings', null, err);
+    return next(customError);
+  }
+};
+
+export const getMyDraftCount = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.jwtPayload;
+  const listingRepository = getRepository(Listing);
+  try {
+    const total = await listingRepository.count({
+      where: { draft: true, user_id: id },
+    });
+    return res.customSuccess(200, 'Draft listings count retrieved', {
+      total,
+    });
+  } catch (err) {
+    const customError = new CustomError(400, 'Raw', 'Error retrieving draft listings count', null, err);
+    return next(customError);
+  }
+};
+
 export const showListing = async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const listingRepository = getRepository(Listing);
