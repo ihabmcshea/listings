@@ -8,7 +8,7 @@ interface LocationContextType {
   location: GeolocationPosition | null;
   city: string | null;
   country: string | null;
-  setLocation: (location: { lat: number; lon: number }) => void;
+  setLocation: (location: GeolocationPosition | null) => void;
 }
 
 const LocationContext = createContext<LocationContextType | undefined>(undefined);
@@ -40,7 +40,7 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   }, [location]);
 
-  // Fetch initial location and set up periodic updates
+  // Fetch initial location
   useEffect(() => {
     const fetchLocalLocation = () => {
       if (navigator.geolocation) {
@@ -55,10 +55,6 @@ export const LocationProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     };
 
     fetchLocalLocation();
-
-    // Optional: Update location periodically
-    const intervalId = setInterval(fetchLocalLocation, 60 * 60 * 1000); // Update every hour
-    return () => clearInterval(intervalId);
   }, []);
 
   return (
