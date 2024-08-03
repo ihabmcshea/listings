@@ -4,9 +4,9 @@ import { getRepository } from 'typeorm';
 
 import { listingsPerPage } from 'consts/ConstsListing';
 import { City } from 'orm/entities/cities/City';
+import { CustomError } from 'utils/response/custom-error/CustomError';
 
 import { citiesList } from './interfaces';
-import { CustomError } from 'utils/response/custom-error/CustomError';
 
 export const listCities = async (req: Request, res: Response, next: NextFunction) => {
   const { country, long, lat, page = 1 } = req.body;

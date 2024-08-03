@@ -9,9 +9,9 @@ import {
   showMyDrafts,
 } from 'controllers/listings';
 import { checkJwt } from 'middleware/checkJwt';
+import { listingsUpload, multerErrorHandler } from 'middleware/upload';
 import { validateCreateListing } from 'middleware/validation/listings/create';
 import { validateEdit } from 'middleware/validation/listings/validateEdit';
-import { listingsUpload, multerErrorHandler } from 'middleware/upload';
 
 const router = Router();
 

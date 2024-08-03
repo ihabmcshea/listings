@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { getRepository } from 'typeorm';
+
 import { CustomError } from 'utils/response/custom-error/CustomError';
+
 import { showListings } from './list';
 
 jest.mock('typeorm', () => ({

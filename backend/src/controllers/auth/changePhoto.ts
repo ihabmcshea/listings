@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { getRepository } from 'typeorm';
 
+import { getPathWithoutPrefixes } from 'middleware/upload';
 import { User } from 'orm/entities/users/User';
 import { MulterRequest } from 'types/File';
 import { CustomError } from 'utils/response/custom-error/CustomError';
-import { getPathWithoutPrefixes } from 'middleware/upload';
 
 export const changePhoto = async (req: Request, res: Response, next: NextFunction) => {
   const image = (req as unknown as MulterRequest).file;

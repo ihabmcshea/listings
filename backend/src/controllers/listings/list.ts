@@ -1,15 +1,15 @@
 import { Request, Response, NextFunction } from 'express';
+import { Point } from 'geojson';
 import { getRepository } from 'typeorm';
 
 import { listingsPerPage } from 'consts/ConstsListing';
+import { City } from 'orm/entities/cities/City';
 import { Listing } from 'orm/entities/listings/Listing';
 import { Photo } from 'orm/entities/photos/Photo';
-import { Point } from 'geojson';
+import { User } from 'orm/entities/users/User';
 import { CustomError } from 'utils/response/custom-error/CustomError';
 
 import { ListingWithDistance, PaginatedListings } from './interfaces';
-import { City } from 'orm/entities/cities/City';
-import { User } from 'orm/entities/users/User';
 
 /**
  * Shows all listings in a certain city or near certain coordinates.

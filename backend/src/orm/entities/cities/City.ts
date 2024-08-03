@@ -1,5 +1,6 @@
 import { Point } from 'geojson';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany, UpdateDateColumn, Index } from 'typeorm';
+
 import { Listing } from '../listings/Listing';
 
 @Entity('cities')

@@ -60,7 +60,7 @@ const ListingPage: React.FC<{ params: { id: string } }> = ({ params }) => {
                 frameBorder="0"
                 src={`https://www.google.com/maps/embed/v1/place?q=${encodeURIComponent(
                   `${listing.coordinates.coordinates[0]},${listing.coordinates.coordinates[1]}`,
-                )}&key=YOUR_GOOGLE_MAPS_API_KEY`}
+                )}&key=AIzaSyBZCscE_y9jBYpXeeiiUlo_-_GAT9hoU1E`}
                 allowFullScreen
               ></iframe>
             </Box>

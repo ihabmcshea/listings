@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
-import { getRepository } from 'typeorm';
-import { Listing } from 'orm/entities/listings/Listing';
-import { User } from 'orm/entities/users/User';
-import { City } from 'orm/entities/cities/City';
-import { CustomError } from 'utils/response/custom-error/CustomError';
 import { Point } from 'geojson';
+import { getRepository } from 'typeorm';
+
+import { City } from 'orm/entities/cities/City';
+import { Listing } from 'orm/entities/listings/Listing';
 import { Status } from 'orm/entities/listings/types';
+import { User } from 'orm/entities/users/User';
+import { CustomError } from 'utils/response/custom-error/CustomError';
 
 /**
  * Creates a new listing in the database.

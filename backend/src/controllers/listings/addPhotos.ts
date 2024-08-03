@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import { getRepository } from 'typeorm';
 
+import { getPathWithoutPrefixes } from 'middleware/upload';
 import { Listing } from 'orm/entities/listings/Listing';
 import { Photo } from 'orm/entities/photos/Photo';
 import { MulterRequest } from 'types/File';
 import { CustomError } from 'utils/response/custom-error/CustomError';
-import { getPathWithoutPrefixes } from 'middleware/upload';
 
 export const addPhotosToListing = async (req: Request, res: Response, next: NextFunction) => {
   const { listing_id } = req.params;

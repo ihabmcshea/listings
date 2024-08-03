@@ -1,6 +1,8 @@
 import bcrypt from 'bcryptjs';
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+
 import { Listing } from '../listings/Listing';
+
 import { Role } from './types';
 
 /**

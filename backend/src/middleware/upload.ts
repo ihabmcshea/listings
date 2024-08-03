@@ -1,7 +1,8 @@
 import 'dotenv/config';
 import path from 'path';
-import multer, { FileFilterCallback } from 'multer';
+
 import { Request, Response, NextFunction } from 'express';
+import multer, { FileFilterCallback } from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 
 // Utility function to get path without prefixes

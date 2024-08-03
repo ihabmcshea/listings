@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { getRepository } from 'typeorm';
 
 import { Listing } from 'orm/entities/listings/Listing';
+import { Role } from 'orm/entities/users/types';
 import { User } from 'orm/entities/users/User';
 import { CustomError } from 'utils/response/custom-error/CustomError';
-import { Role } from 'orm/entities/users/types';
 
 export const validateEdit = async (req: Request, res: Response, next: NextFunction) => {
   const { listing_id } = req.params;
