@@ -78,135 +78,135 @@ export const showListings = async (req: Request, res: Response, next: NextFuncti
       const origin: Point = { type: 'Point', coordinates: [long, lat] }; // Define the origin point
       const rangeMeters = radius * 1000; // Convert radius to meters
 
-      // Fetch nearby listing IDs from Redis
-      const nearbyListingIds = await redis.georadius(geoKey, long, lat, radius, 'km');
+      // // Fetch nearby listing IDs from Redis
+      // const nearbyListingIds = await redis.georadius(geoKey, long, lat, radius, 'km');
 
-      if (nearbyListingIds.length > 0) {
-        // Case: Listings found in Redis
-        const [data, total] = await Promise.all([
-          listingRepository
-            .createQueryBuilder('listing')
-            .select([
-              'listing.id',
-              'listing.title',
-              'listing.description',
-              'listing.coordinates',
-              'user.name',
-              'user.description',
-              'city.name',
-              'photo.id',
-              'photo.url',
-              'photo.height',
-              'photo.width',
-              'photo.created_at',
-              'photo.updated_at',
-              'photo.listing_id',
-              'ST_Distance(listing.coordinates, ST_SetSRID(ST_GeomFromGeoJSON(:origin), 4326)) AS distance',
-            ])
-            .leftJoin('listing.user', 'user')
-            .leftJoin('listing.city', 'city')
-            .leftJoin('listing.photos', 'photo')
-            .where('listing.id IN (:...ids)', { ids: nearbyListingIds })
-            .orderBy('distance', 'ASC')
-            .addOrderBy('listing.id', 'ASC') // Ensure consistent ordering
-            .setParameters({
-              origin: JSON.stringify(origin),
-              range: rangeMeters, // Convert radius to meters
-            })
-            .limit(listingsPerPage)
-            .offset(skip)
-            .getRawAndEntities(),
-          listingRepository
-            .createQueryBuilder('listing')
-            .select('COUNT(DISTINCT listing.id)', 'count')
-            .where('listing.id IN (:...ids)', { ids: nearbyListingIds })
-            .getRawOne(),
-        ]);
+      // if (nearbyListingIds.length > 0) {
+      //   // Case: Listings found in Redis
+      //   const [data, total] = await Promise.all([
+      //     listingRepository
+      //       .createQueryBuilder('listing')
+      //       .select([
+      //         'listing.id',
+      //         'listing.title',
+      //         'listing.description',
+      //         'listing.coordinates',
+      //         'user.name',
+      //         'user.description',
+      //         'city.name',
+      //         'photo.id',
+      //         'photo.url',
+      //         'photo.height',
+      //         'photo.width',
+      //         'photo.created_at',
+      //         'photo.updated_at',
+      //         'photo.listing_id',
+      //         'ST_Distance(listing.coordinates, ST_SetSRID(ST_GeomFromGeoJSON(:origin), 4326)) AS distance',
+      //       ])
+      //       .leftJoin('listing.user', 'user')
+      //       .leftJoin('listing.city', 'city')
+      //       .leftJoin('listing.photos', 'photo')
+      //       .where('listing.id IN (:...ids)', { ids: nearbyListingIds })
+      //       .orderBy('distance', 'ASC')
+      //       .addOrderBy('listing.id', 'ASC') // Ensure consistent ordering
+      //       .setParameters({
+      //         origin: JSON.stringify(origin),
+      //         range: rangeMeters, // Convert radius to meters
+      //       })
+      //       .limit(listingsPerPage)
+      //       .offset(skip)
+      //       .getRawAndEntities(),
+      //     listingRepository
+      //       .createQueryBuilder('listing')
+      //       .select('COUNT(DISTINCT listing.id)', 'count')
+      //       .where('listing.id IN (:...ids)', { ids: nearbyListingIds })
+      //       .getRawOne(),
+      //   ]);
 
-        const rawData = data.raw;
-        const listingsWithDistance = data.entities.map((listing: any, index: number) => ({
-          ...listing,
-          distance: Number(rawData[index].distance / 1000), // Convert distance to kilometers
-        }));
+      //   const rawData = data.raw;
+      //   const listingsWithDistance = data.entities.map((listing: any, index: number) => ({
+      //     ...listing,
+      //     distance: Number(rawData[index].distance / 1000), // Convert distance to kilometers
+      //   }));
 
-        const pages = Math.ceil(Number(total.count) / listingsPerPage);
-        return res.customSuccess(200, 'Listings retrieved', {
-          total: Number(total.count),
-          listings: listingsWithDistance,
-          page,
-          pages,
-          limit: listingsPerPage,
-        });
-      } else {
-        // Case: Fetch listings from PostgreSQL if not found in Redis
-        const [data, total] = await Promise.all([
-          listingRepository
-            .createQueryBuilder('listing')
-            .select([
-              'listing.id',
-              'listing.title',
-              'listing.description',
-              'listing.coordinates',
-              'user.name',
-              'user.description',
-              'city.name',
-              'photo.id',
-              'photo.url',
-              'photo.height',
-              'photo.width',
-              'photo.created_at',
-              'photo.updated_at',
-              'photo.listing_id',
-              'ST_Distance(listing.coordinates, ST_SetSRID(ST_GeomFromGeoJSON(:origin), 4326)) AS distance',
-            ])
-            .leftJoin('listing.user', 'user')
-            .leftJoin('listing.city', 'city')
-            .leftJoin('listing.photos', 'photo')
-            .where(
-              'ST_DWithin(listing.coordinates, ST_SetSRID(ST_GeomFromGeoJSON(:origin), 4326), :range) AND listing.draft = false',
-            )
-            .orderBy('distance', 'ASC')
-            .addOrderBy('listing.id', 'ASC') // Ensure consistent ordering
-            .setParameters({
-              origin: JSON.stringify(origin),
-              range: rangeMeters, // Convert radius to meters
-            })
-            .limit(listingsPerPage)
-            .offset(skip)
-            .getRawAndEntities(),
-          listingRepository
-            .createQueryBuilder('listing')
-            .select('COUNT(DISTINCT listing.id)', 'count')
-            .where(
-              'ST_DWithin(listing.coordinates, ST_SetSRID(ST_GeomFromGeoJSON(:origin), ST_SRID(listing.coordinates)), :range) AND listing.draft IS NOT TRUE',
-            )
-            .setParameters({
-              origin: JSON.stringify(origin),
-              range: rangeMeters,
-            })
-            .getRawOne(),
-        ]);
+      //   const pages = Math.ceil(Number(total.count) / listingsPerPage);
+      //   return res.customSuccess(200, 'Listings retrieved', {
+      //     total: Number(total.count),
+      //     listings: listingsWithDistance,
+      //     page,
+      //     pages,
+      //     limit: listingsPerPage,
+      //   });
+      // } else {
+      // Case: Fetch listings from PostgreSQL if not found in Redis
+      const [data, total] = await Promise.all([
+        listingRepository
+          .createQueryBuilder('listing')
+          .select([
+            'listing.id',
+            'listing.title',
+            'listing.description',
+            'listing.coordinates',
+            'user.name',
+            'user.description',
+            'city.name',
+            'photo.id',
+            'photo.url',
+            'photo.height',
+            'photo.width',
+            'photo.created_at',
+            'photo.updated_at',
+            'photo.listing_id',
+            'ST_Distance(listing.coordinates, ST_SetSRID(ST_GeomFromGeoJSON(:origin), 4326)) AS distance',
+          ])
+          .leftJoin('listing.user', 'user')
+          .leftJoin('listing.city', 'city')
+          .leftJoin('listing.photos', 'photo')
+          .where(
+            'ST_DWithin(listing.coordinates, ST_SetSRID(ST_GeomFromGeoJSON(:origin), 4326), :range) AND listing.draft = false',
+          )
+          .orderBy('distance', 'ASC')
+          .addOrderBy('listing.id', 'ASC') // Ensure consistent ordering
+          .setParameters({
+            origin: JSON.stringify(origin),
+            range: rangeMeters, // Convert radius to meters
+          })
+          .limit(listingsPerPage)
+          .offset(skip)
+          .getRawAndEntities(),
+        listingRepository
+          .createQueryBuilder('listing')
+          .select('COUNT(DISTINCT listing.id)', 'count')
+          .where(
+            'ST_DWithin(listing.coordinates, ST_SetSRID(ST_GeomFromGeoJSON(:origin), ST_SRID(listing.coordinates)), :range) AND listing.draft IS NOT TRUE',
+          )
+          .setParameters({
+            origin: JSON.stringify(origin),
+            range: rangeMeters,
+          })
+          .getRawOne(),
+      ]);
 
-        const rawData = data.raw;
-        const listingsWithDistance = data.entities.map((listing: any, index: number) => ({
-          ...listing,
-          distance: Number(rawData[index].distance / 1000), // Convert distance to kilometers
-        }));
+      const rawData = data.raw;
+      const listingsWithDistance = data.entities.map((listing: any, index: number) => ({
+        ...listing,
+        distance: Number(rawData[index].distance / 1000), // Convert distance to kilometers
+      }));
 
-        // Update Redis with the new listings data
-        listingsWithDistance.forEach((listing) => {
-          redis.geoadd(geoKey, listing.coordinates.longitude, listing.coordinates.latitude, listing.id);
-        });
+      // Update Redis with the new listings data
+      listingsWithDistance.forEach((listing) => {
+        redis.geoadd(geoKey, listing.coordinates.longitude, listing.coordinates.latitude, listing.id);
+      });
 
-        const pages = Math.ceil(Number(total.count) / listingsPerPage);
-        return res.customSuccess(200, 'Listings retrieved', {
-          total: Number(total.count),
-          listings: listingsWithDistance,
-          page,
-          pages,
-          limit: listingsPerPage,
-        });
-      }
+      const pages = Math.ceil(Number(total.count) / listingsPerPage);
+      return res.customSuccess(200, 'Listings retrieved', {
+        total: Number(total.count),
+        listings: listingsWithDistance,
+        page,
+        pages,
+        limit: listingsPerPage,
+      });
+      // }
     } else {
       // Case: Handle listings without filters
       const [data, total] = await listingRepository.findAndCount({
