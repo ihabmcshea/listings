@@ -6,7 +6,6 @@ import { City } from 'orm/entities/cities/City';
 import { Listing } from 'orm/entities/listings/Listing';
 import { Status } from 'orm/entities/listings/types';
 import { User } from 'orm/entities/users/User';
-import { indexListing } from 'utils/elasticSearchUtils';
 import { CustomError } from 'utils/response/custom-error/CustomError';
 
 import redis from '../../clients/redisClient';
@@ -66,7 +65,6 @@ export const createListing = async (req: Request, res: Response, next: NextFunct
 
     redis.geoadd('listings', newListing.coordinates.longitude, newListing.coordinates.latitude, newListing.id);
 
-    indexListing(newListing);
     await listingRepository.save(newListing);
 
     return res.status(201).json({

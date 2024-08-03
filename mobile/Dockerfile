@@ -14,7 +14,7 @@ EXPOSE 19006 19001 19002
 # install global packages
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 ENV PATH /home/node/.npm-global/bin:$PATH
-RUN npm i --unsafe-perm -g npm@latest expo-cli@latest
+RUN npm i --unsafe-perm -g expo-cli@6.3.10
 RUN apt-get update && apt-get install -y qemu-user-static
 #We need to install this inorder to start a tunnel on the docker conatiner
 RUN yarn add @expo/ngrok

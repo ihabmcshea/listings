@@ -6,7 +6,7 @@ import { listingsPerPage } from 'consts/ConstsListing';
 import { Listing } from 'orm/entities/listings/Listing';
 import { CustomError } from 'utils/response/custom-error/CustomError';
 
-import elasticSearchClient from '../../clients/elasticSearchClient';
+// import elasticSearchClient from '../../clients/elasticSearchClient';
 import redis from '../../clients/redisClient';
 
 import { ListingWithDistance, PaginatedListings } from './interfaces';
@@ -29,31 +29,31 @@ export const showListings = async (req: Request, res: Response, next: NextFuncti
   const listingRepository = getRepository(Listing);
 
   try {
-    if (searchQuery) {
-      const body = await elasticSearchClient.search({
-        index: 'listings',
-        body: {
-          query: {
-            match: {
-              description: {
-                query: searchQuery,
-                operator: 'and',
-              },
-            },
-          },
-          from: skip,
-          size: listingsPerPage,
-        },
-      });
-      const listings = body.hits.hits.map((hit: any) => hit._source);
-      return res.customSuccess(200, 'Listings retrieved', {
-        total: body.hits.total,
-        listings,
-        page,
-        pages: Math.ceil(Number(body.hits.total) / listingsPerPage),
-        limit: listingsPerPage,
-      });
-    }
+    // if (searchQuery) {
+    //   const body = await elasticSearchClient.search({
+    //     index: 'listings',
+    //     body: {
+    //       query: {
+    //         match: {
+    //           description: {
+    //             query: searchQuery,
+    //             operator: 'and',
+    //           },
+    //         },
+    //       },
+    //       from: skip,
+    //       size: listingsPerPage,
+    //     },
+    //   });
+    //   const listings = body.hits.hits.map((hit: any) => hit._source);
+    //   return res.customSuccess(200, 'Listings retrieved', {
+    //     total: body.hits.total,
+    //     listings,
+    //     page,
+    //     pages: Math.ceil(Number(body.hits.total) / listingsPerPage),
+    //     limit: listingsPerPage,
+    //   });
+    // }
     if (city && !(long && lat && radius)) {
       // Case: Fetch listings by city with pagination
       const [listingData, total] = await listingRepository.findAndCount({
