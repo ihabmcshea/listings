@@ -69,7 +69,7 @@ services:
     stdin_open: true
     tty: true
     env_file:
-      -.env
+      - .env
     networks:
       - app-network
 
