@@ -6,27 +6,13 @@ FROM node:20
 ARG NODE_ENV=development
 ENV NODE_ENV $NODE_ENV
 
-# default to port 19006 for node, and 19001 and 19002 (tests) for debug
-ARG PORT=19006
-ENV PORT $PORT
-EXPOSE 8081 19006 19001 19002
-
-# install dependencies first, in a different location for easier app bind mounting for local development
-# due to default /opt permissions we have to create the dir with root and change perms
-RUN mkdir /opt/my-app && chown root:root /opt/my-app
 WORKDIR /opt/my-app
-ENV PATH /opt/my-app/.bin:$PATH
-USER root
-COPY package.json package-lock.json ./
-RUN npm i
-#We need to install this inorder to start a tunnel on the docker conatiner
-RUN npm i @expo/ngrok
 
-
-# copy in our source code last, as it changes the most
-WORKDIR /opt/my-app
-# for development, we bind mount volumes; comment out for production
-COPY . /opt/my-app/
+COPY ./package.json .
+COPY ./yarn.lock .
+RUN yarn 
+# We need this so we can tunnel expo 
+RUN yarn add @expo/ngrok@^4.1.0
 
 
 CMD ["npx","expo", "start", "--tunnel"]
